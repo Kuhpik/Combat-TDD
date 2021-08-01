@@ -12,5 +12,11 @@ namespace Game.Characters
             View = GameObject.Instantiate(settings.Prefab);
             Stats = settings.Stats;
         }
+
+        public Character(Stats stats)
+        {
+            Stats = stats;
+            View = new GameObject("Dummy");
+        }
     }
 }
