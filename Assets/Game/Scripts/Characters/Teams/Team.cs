@@ -37,9 +37,27 @@ namespace Game.Characters.Teams
             Name = name;
         }
 
+        public bool IsAlly(Character other)
+        {
+            return _allies.Contains(other.Team);
+        }
+
+        public bool IsEnemy(Character other)
+        {
+            return _enemies.Contains(other.Team);
+        }
+
+        /// <summary>
+        /// Will also Set team to passed characters
+        /// </summary>
         public void AddMembers(params Character[] characters)
         {
             _members.AddRange(characters);
+
+            foreach (var character in characters)
+            {
+                character.SetTeam(this);
+            }
         }
 
         public void AddAllies(params Team[] allies)
@@ -52,11 +70,15 @@ namespace Game.Characters.Teams
             _enemies.AddRange(enemies);
         }
 
+        /// <summary>
+        /// Will also remove this team from passed characters
+        /// </summary>
         public void RemoveMembers(params Character[] charactersToRemove)
         {
             foreach (var member in charactersToRemove)
             {
                 _members.Remove(member);
+                member.SetTeam(null);
             }
         }
 

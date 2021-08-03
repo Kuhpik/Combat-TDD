@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Game.Characters.Teams;
+using UnityEngine;
 
 namespace Game.Characters
 {
@@ -6,6 +7,7 @@ namespace Game.Characters
     {
         public GameObject View { get; }
         public Stats Stats { get; }
+        public Team Team { get; private set; }
 
         public Character(CharacterSettings settings)
         {
@@ -17,6 +19,11 @@ namespace Game.Characters
         {
             Stats = stats;
             View = new GameObject("Dummy");
+        }
+
+        public void SetTeam(Team team)
+        {
+            Team = team;
         }
     }
 }
