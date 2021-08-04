@@ -6,7 +6,12 @@ namespace Game.Spells.Utils
 {
     public sealed class CircleSpellArea : SpellArea
     {
-        public CircleSpellArea(float size) : base(size) { }
+        float _radiusSquared;
+
+        public CircleSpellArea(float size) : base(size) 
+        {
+            _radiusSquared = Mathf.Pow(size, 2);
+        }
 
         public override IEnumerable<Character> GetTargets(Vector3 point, IEnumerable<Character> CharactersOnTheField)
         {
@@ -29,9 +34,10 @@ namespace Game.Spells.Utils
         {
             var pointX = pos.x - point.x;
             var pointZ = pos.z - point.z;
-            var radius = Size;
+            var summ = Mathf.Pow(pointX, 2) + Mathf.Pow(pointZ, 2);
+            var rounded = Mathf.Round(summ * 1000) / 1000; //Rounding to 3 digit
 
-            return Mathf.Pow(pointX, 2) + Mathf.Pow(pointZ, 2) <= Mathf.Pow(radius, 2);
+            return rounded <= _radiusSquared;
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Tests
         }
 
         [Test]
-        public void Circle_Spell_Hit_3_Warriors_1_Out_Of_Area()
+        public void Circle_Spell_Hit_3_Warriors_2_Out_Of_Area()
         {
             var dummyHealth = 200;
 
@@ -60,8 +60,9 @@ namespace Tests
             var warrior2 = new Warrior(new Stats() { Health = dummyHealth, Damage = 0, SpellDamage = 0 });
             var warrior3 = new Warrior(new Stats() { Health = dummyHealth, Damage = 0, SpellDamage = 0 });
             var warrior4 = new Warrior(new Stats() { Health = dummyHealth, Damage = 0, SpellDamage = 0 });
+            var warrior5 = new Warrior(new Stats() { Health = dummyHealth, Damage = 0, SpellDamage = 0 });
 
-            var charactersOnTheField = new List<Character>() { warrior1, warrior2, warrior3, warrior4 };
+            var charactersOnTheField = new List<Character>() { warrior1, warrior2, warrior3, warrior4, warrior5 };
 
             var targetingService = new AreaTargetingService(new CircleSpellArea(2), charactersOnTheField);
             var spell = new AoEBurstDamageSpell(targetingService, 50);
@@ -74,8 +75,9 @@ namespace Tests
             warrior2.View.transform.position = new Vector3(4, 0, 6);
             warrior3.View.transform.position = new Vector3(6, 0, 2);
 
-            var pointOnRadius45Degree = 4 + Mathf.Sqrt(2) / 2 * (spell.Area.Size / 2);
+            var pointOnRadius45Degree = 4 + Mathf.Sqrt(2) / 2 * spell.Area.Size;
             warrior4.View.transform.position = new Vector3(pointOnRadius45Degree, 0, pointOnRadius45Degree);
+            warrior5.View.transform.position = new Vector3(pointOnRadius45Degree + 0.1f, 0, pointOnRadius45Degree + 0.1f);
 
             spell.Cast();
 
@@ -83,6 +85,7 @@ namespace Tests
             Assert.AreEqual(warrior2.Stats.Health, healthLeft);
             Assert.AreEqual(warrior3.Stats.Health, dummyHealth);
             Assert.AreEqual(warrior4.Stats.Health, healthLeft);
+            Assert.AreEqual(warrior5.Stats.Health, dummyHealth);
         }
     }
 }
