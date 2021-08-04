@@ -24,7 +24,6 @@ namespace Tests
             team2.AddMembers(enemy);
             team1.AddEnemies(team2);
 
-            healSpell.Target();
             healSpell.SelectTarget(enemy);
             healSpell.Cast();
 
@@ -46,7 +45,6 @@ namespace Tests
             warrior1.View.transform.position = new Vector3(5, 0, 0);
             warrior2.View.transform.position = new Vector3(6, 0, 0);
 
-            healSpell.Target();
             healSpell.SelectTarget(warrior1);
             healSpell.Cast();
 
@@ -73,7 +71,6 @@ namespace Tests
                 warrior.View.transform.position = Vector3.right * Fact(5 - i);
             }
 
-            healSpell.Target();
             healSpell.SelectTarget(warriorsList[0]);
             healSpell.Cast();
 
@@ -105,7 +102,6 @@ namespace Tests
 
             caster.View.transform.position = Vector3.right * 50;
 
-            healSpell.Target();
             healSpell.SelectTarget(warriorsList[0]);
             healSpell.Cast();
 
@@ -142,7 +138,6 @@ namespace Tests
                 warrior.View.transform.position = Vector3.right * Fact(6 - i);
             }
 
-            healSpell.Target();
             healSpell.SelectTarget(warriorsList[0]);
             healSpell.Cast();
 

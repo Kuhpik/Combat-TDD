@@ -43,11 +43,6 @@ namespace Game.Spells
             _target = target;
         }
 
-        public virtual void Target()
-        {
-            //TODO
-        }
-
         public abstract void Affect(Character target);
 
         protected Character GetClosest(IEnumerable<Character> characters)

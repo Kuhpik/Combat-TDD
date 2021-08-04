@@ -1,17 +1,20 @@
-﻿using Game.Characters;
+﻿using Game.Spells.Utils;
 
 namespace Game.Spells
 {
     public sealed class AoEBurstDamageSpell : AoESpell
     {
-        public int Damage => _user.Stats.SpellDamage * Factor;
-        public int Factor => 2;
-        public override float Area => 3f;
-        readonly Character _user;
+        public int Damage { get; private set; }
 
-        public AoEBurstDamageSpell(Character user)
+        public AoEBurstDamageSpell(AreaTargetingService areaTargeting) : base(areaTargeting) { }
+        public AoEBurstDamageSpell(AreaTargetingService areaTargeting, int damage) : base(areaTargeting)
         {
-            _user = user;
+            SetDamage(damage);
+        }
+
+        public void SetDamage(int damage)
+        {
+            Damage = damage;
         }
 
         public override void Cast()
