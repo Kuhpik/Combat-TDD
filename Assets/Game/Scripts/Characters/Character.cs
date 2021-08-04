@@ -1,5 +1,6 @@
 ﻿using Game.Characters.Teams;
 using UnityEngine;
+using Game.Characters.CharacterStats;
 
 namespace Game.Characters
 {
