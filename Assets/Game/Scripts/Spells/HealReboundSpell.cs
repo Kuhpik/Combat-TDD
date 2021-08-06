@@ -17,7 +17,7 @@ namespace Game.Spells
 
         public override void Affect(Character target)
         {
-            target.Stats.Health += HealAmount;
+            target.Health.Restore(HealAmount);
         }
     }
 }

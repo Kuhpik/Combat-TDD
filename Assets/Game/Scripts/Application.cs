@@ -20,7 +20,7 @@ namespace Game
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 var mage = _mageFactory.Create();
-                Debug.Log($"Mage's health: {mage.Stats.Health}. S.Damage: {mage.Stats.SpellDamage}");
+                Debug.Log($"Mage's health: {mage.Health.Value}.");
             }
         }
     }

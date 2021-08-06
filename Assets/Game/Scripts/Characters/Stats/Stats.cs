@@ -1,4 +1,5 @@
 ﻿using Game.Characters.CharacterStats.Commons;
+using Game.Characters.CharacterStats.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,20 +22,19 @@ namespace Game.Characters.CharacterStats
         public Stats()
         {
             _statDictionary = (Enum.GetValues(typeof(EStat)) as IList<EStat>)
-                .ToDictionary(x => x, x => new Stat());
+                .ToDictionary(x => x, x => new Stat(new StatCalculator(), x)); //TODO: Zenject factory
 
             StatDictionary = new ReadOnlyDictionary<EStat, Stat>(_statDictionary);
             _sourcesMap = new HashSet<IStatModifierProvider>();
             _sources = new List<IStatModifierProvider>();
             Sources = _sources.AsReadOnly();
-
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="stats">Will not use provided references or modifiers. Only used to copy base values.</param>
-        public Stats(IEnumerable<Stat> stats) : this()
+        public Stats(params Stat[] stats) : this()
         {
             foreach (var stat in stats)
             {

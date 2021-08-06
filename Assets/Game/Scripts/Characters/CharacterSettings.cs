@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game.Characters.CharacterStats;
+using System;
 using UnityEngine;
 
 namespace Game.Characters

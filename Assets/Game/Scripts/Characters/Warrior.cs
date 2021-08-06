@@ -1,4 +1,5 @@
-﻿using Zenject;
+﻿using Game.Characters.CharacterStats;
+using Zenject;
 
 namespace Game.Characters
 {

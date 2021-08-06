@@ -23,7 +23,7 @@ namespace Game.Spells
 
             foreach (var target in _targets)
             {
-                target.Stats.Health -= Damage;
+                target.Health.Reduce(Damage);
             }
         }
     }

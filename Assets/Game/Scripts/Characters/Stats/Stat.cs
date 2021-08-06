@@ -12,8 +12,17 @@ namespace Game.Characters.CharacterStats
         [SerializeField] float _baseValue;
         [SerializeField] float _maxValue = -1;
 
+        /// <summary>
+        /// Returns actual value this stat. 
+        /// </summary>
         public float Value => GetValue();
+        /// <summary>
+        /// Returns hard-capped value of this stat
+        /// </summary>
         public float MaxValue => _maxValue;
+        /// <summary>
+        /// Returns value with no modifiers on it
+        /// </summary>
         public float BaseValue => _baseValue;
 
         public readonly EStat Type;
@@ -21,6 +30,7 @@ namespace Game.Characters.CharacterStats
 
         float _value;
         bool _wasModified;
+        Action<float> _onValueChanged;
         readonly StatCalculator _calculator;
         readonly List<StatModifier> _modifiers;
 
@@ -39,6 +49,12 @@ namespace Game.Characters.CharacterStats
         public Stat(StatCalculator calculator, EStat type, float baseValue, float maxValue) : this(calculator, type)
         {
             SetValues(baseValue, maxValue);
+        }
+
+        //Encapsulation is Pain
+        public void SubscribeToValueChangeEvent(Action<float> action)
+        {
+            _onValueChanged += action;
         }
 
         internal void SetValues(float baseValue, float maxValue)
@@ -75,7 +91,11 @@ namespace Game.Characters.CharacterStats
         //So we're not calculating Value until player request it.
         float GetValue()
         {
-            if (_wasModified) Recalculate();
+            if (_wasModified)
+            {
+                Recalculate();
+                _onValueChanged?.Invoke(_value);
+            }
             return _value;
         }
     }
