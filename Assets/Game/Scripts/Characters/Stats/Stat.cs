@@ -14,64 +14,54 @@ namespace Game.Characters.CharacterStats
 
         public float Value => GetValue();
         public float MaxValue => _maxValue;
+        public float BaseValue => _baseValue;
 
         public readonly EStat Type;
         public readonly IReadOnlyCollection<StatModifier> Modifiers;
 
         float _value;
-        bool _wasModified = true; //In most cases value != baseValue at the start
-
+        bool _wasModified;
         readonly StatCalculator _calculator;
         readonly List<StatModifier> _modifiers;
 
-        readonly Dictionary<IStatModifierProvider, IReadOnlyCollection<StatModifier>> _modifierProviders;
-        readonly Dictionary<IStatModifierProvider, Vector2Int> _modifierCollectionIndexes;
-
         public Stat()
         {
-            _modifierProviders = new Dictionary<IStatModifierProvider, IReadOnlyCollection<StatModifier>>();
-            _modifierCollectionIndexes = new Dictionary<IStatModifierProvider, Vector2Int>();
             _modifiers = new List<StatModifier>();
             Modifiers = _modifiers.AsReadOnly();
         }
 
-        public Stat(StatCalculator calculator, EStat type, float baseValue, float maxValue) : this()
+        public Stat(StatCalculator calculator, EStat type) : this()
         {
             Type = type;
             _calculator = calculator;
+        }
+
+        public Stat(StatCalculator calculator, EStat type, float baseValue, float maxValue) : this(calculator, type)
+        {
             SetValues(baseValue, maxValue);
         }
 
-        public void SetValues(float baseValue, float maxValue)
+        internal void SetValues(float baseValue, float maxValue)
         {
             _maxValue = maxValue;
             _baseValue = baseValue;
+            _wasModified = true;
         }
 
-        public void AddModifiers(IReadOnlyCollection<StatModifier> modifiers, IStatModifierProvider provider)
+        internal void AddModifiers(IEnumerable<StatModifier> modifiers)
         {
-            if (!_modifierProviders.ContainsKey(provider))
-            {
-                _modifierCollectionIndexes.Add(provider, new Vector2Int(_modifiers.Count - 1, modifiers.Count));
-                _modifierProviders.Add(provider, modifiers);
-                _modifiers.AddRange(modifiers);
-
-                _wasModified = true;
-            }
+            _modifiers.AddRange(modifiers);
+            _wasModified = true;
         }
 
-        public void RemoveModifiers(IStatModifierProvider provider)
+        internal void RemoveModifiers(IEnumerable<StatModifier> modifiers)
         {
-            if (_modifierProviders.ContainsKey(provider))
+            foreach (var modifier in modifiers)
             {
-                var indexes = _modifierCollectionIndexes[provider];
-
-                _modifierProviders.Remove(provider);
-                _modifierCollectionIndexes.Remove(provider);
-                _modifiers.RemoveRange(indexes.x, indexes.y);
-
-                _wasModified = true;
+                _modifiers.Remove(modifier);
             }
+
+            _wasModified = true;
         }
 
         void Recalculate()
