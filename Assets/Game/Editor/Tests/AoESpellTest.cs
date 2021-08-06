@@ -1,4 +1,7 @@
 ﻿using Game.Characters;
+using Game.Characters.CharacterStats;
+using Game.Characters.CharacterStats.Commons;
+using Game.Characters.CharacterStats.Utils;
 using Game.Spells;
 using Game.Spells.Utils;
 using NUnit.Framework;
@@ -26,10 +29,11 @@ namespace Tests
         public void Rect_Spell_Hit_2_Warriors_1_Out_Of_Area()
         {
             var dummyHealth = 200;
+            var healthStat = new Stat(new StatCalculator(), EStat.Health, dummyHealth, 1000);
 
-            var warrior1 = new Warrior(new Stats() { Health = dummyHealth, Damage = 0, SpellDamage = 0 });
-            var warrior2 = new Warrior(new Stats() { Health = dummyHealth, Damage = 0, SpellDamage = 0 });
-            var warrior3 = new Warrior(new Stats() { Health = dummyHealth, Damage = 0, SpellDamage = 0 });
+            var warrior1 = new Warrior(new Stats(healthStat));
+            var warrior2 = new Warrior(new Stats(healthStat));
+            var warrior3 = new Warrior(new Stats(healthStat));
 
             var charactersOnTheField = new List<Character>() { warrior1, warrior2, warrior3 };
 
@@ -46,21 +50,22 @@ namespace Tests
 
             spell.Cast();
 
-            Assert.AreEqual(warrior1.Stats.Health, healthLeft);
-            Assert.AreEqual(warrior2.Stats.Health, healthLeft);
-            Assert.AreEqual(warrior3.Stats.Health, dummyHealth);
+            Assert.AreEqual(healthLeft, warrior1.Health.Value);
+            Assert.AreEqual(healthLeft, warrior2.Health.Value);
+            Assert.AreEqual(dummyHealth, warrior3.Health.Value);
         }
 
         [Test]
         public void Circle_Spell_Hit_3_Warriors_2_Out_Of_Area()
         {
             var dummyHealth = 200;
+            var healthStat = new Stat(new StatCalculator(), EStat.Health, dummyHealth, 1000);
 
-            var warrior1 = new Warrior(new Stats() { Health = dummyHealth, Damage = 0, SpellDamage = 0 });
-            var warrior2 = new Warrior(new Stats() { Health = dummyHealth, Damage = 0, SpellDamage = 0 });
-            var warrior3 = new Warrior(new Stats() { Health = dummyHealth, Damage = 0, SpellDamage = 0 });
-            var warrior4 = new Warrior(new Stats() { Health = dummyHealth, Damage = 0, SpellDamage = 0 });
-            var warrior5 = new Warrior(new Stats() { Health = dummyHealth, Damage = 0, SpellDamage = 0 });
+            var warrior1 = new Warrior(new Stats(healthStat));
+            var warrior2 = new Warrior(new Stats(healthStat));
+            var warrior3 = new Warrior(new Stats(healthStat));
+            var warrior4 = new Warrior(new Stats(healthStat));
+            var warrior5 = new Warrior(new Stats(healthStat));
 
             var charactersOnTheField = new List<Character>() { warrior1, warrior2, warrior3, warrior4, warrior5 };
 
@@ -81,11 +86,11 @@ namespace Tests
 
             spell.Cast();
 
-            Assert.AreEqual(warrior1.Stats.Health, healthLeft);
-            Assert.AreEqual(warrior2.Stats.Health, healthLeft);
-            Assert.AreEqual(warrior3.Stats.Health, dummyHealth);
-            Assert.AreEqual(warrior4.Stats.Health, healthLeft);
-            Assert.AreEqual(warrior5.Stats.Health, dummyHealth);
+            Assert.AreEqual(healthLeft,  warrior1.Health.Value);
+            Assert.AreEqual(healthLeft,  warrior2.Health.Value);
+            Assert.AreEqual(dummyHealth, warrior3.Health.Value);
+            Assert.AreEqual(healthLeft,  warrior4.Health.Value);
+            Assert.AreEqual(dummyHealth, warrior5.Health.Value);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Game.Characters;
+using Game.Characters.CharacterStats;
 using Game.Characters.Teams;
 using NUnit.Framework;
 
