@@ -30,7 +30,6 @@ namespace Game.Characters.CharacterStats
 
         float _value;
         bool _wasModified;
-        Action<float> _onValueChanged;
         readonly StatCalculator _calculator;
         readonly List<StatModifier> _modifiers;
 
@@ -56,12 +55,6 @@ namespace Game.Characters.CharacterStats
         public Stat(StatCalculator calculator, EStat type, float baseValue, float maxValue = -1) : this(calculator, type)
         {
             SetValues(baseValue, maxValue);
-        }
-
-        //Encapsulation is Pain
-        public void SubscribeToValueChangeEvent(Action<float> action)
-        {
-            _onValueChanged += action;
         }
 
         /// <summary>
@@ -106,8 +99,8 @@ namespace Game.Characters.CharacterStats
             if (_wasModified)
             {
                 Recalculate();
-                _onValueChanged?.Invoke(_value);
             }
+
             return _value;
         }
     }

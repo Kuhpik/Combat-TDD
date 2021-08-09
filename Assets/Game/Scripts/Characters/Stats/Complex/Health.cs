@@ -10,56 +10,44 @@ namespace Game.Characters.CharacterStats.Complex
         [SerializeField] float _value;
         [SerializeField] float _maxValue;
 
-        /// <summary>
-        /// Used to track changes
-        /// Lets say player had 8\10 hp. If we increase 'Health' stat value by 10 we end up 18\20
-        /// </summary>
-        float _changedValue;
-
-        public float Value => _value + _changedValue;
-        public float MaxValue => _value;
+        public float Value => GetValue();
+        public float MaxValue => _maxValue;
 
         readonly Stats _playerStats;
 
         public Health(Stats stats)
         {
             _playerStats = stats;
-            ChangeMaxValue(stats.GetValue(EStat.Health));
-            _playerStats.GetStat(EStat.Health).SubscribeToValueChangeEvent(ChangeMaxValue);
         }
 
         public void Reduce(float value)
         {
-            _changedValue -= value;
-
-            if (Value <= 0)
-            {
-                _value = 0;
-                _changedValue = 0;
-            }
+            _value = Mathf.Clamp(_value - value, 0, _maxValue);
         }
 
         public void Restore(float value)
         {
-            _changedValue += value;
+            _value = Mathf.Clamp(_value + value, 0, _maxValue);
+        }
 
-            if (Value > _maxValue)
-            {
-                _value = _maxValue;
-                _changedValue = 0;
-            }
+        float GetValue()
+        {
+            var value = _playerStats.GetValue(EStat.Health);
+            ChangeMaxValue(value);
+            return _value;
         }
 
         void ChangeMaxValue(float value)
         {
-            if (value <= 0) return;
-
-            _maxValue = value;
-            _value = _maxValue + _changedValue;
-
-            if (_value > _maxValue)
+            if (_value == _maxValue || //Value as not changed
+                value < _value) //New max value is even lower than our value 
             {
-                _value = _maxValue;
+                _value = _maxValue = value;
+            }
+
+            else
+            {
+                _maxValue = value;
             }
         }
     }
