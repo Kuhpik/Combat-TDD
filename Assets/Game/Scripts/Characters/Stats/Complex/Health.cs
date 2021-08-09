@@ -18,6 +18,7 @@ namespace Game.Characters.CharacterStats.Complex
         public Health(Stats stats)
         {
             _playerStats = stats;
+            GetValue();
         }
 
         public void Reduce(float value)
