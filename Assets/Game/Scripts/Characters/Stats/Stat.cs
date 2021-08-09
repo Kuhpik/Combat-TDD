@@ -46,7 +46,14 @@ namespace Game.Characters.CharacterStats
             _calculator = calculator;
         }
 
-        public Stat(StatCalculator calculator, EStat type, float baseValue, float maxValue) : this(calculator, type)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="calculator"></param>
+        /// <param name="type"></param>
+        /// <param name="baseValue"></param>
+        /// <param name="maxValue">-1 means unlimited. Otherwise you can set smth like float.MaxValue</param>
+        public Stat(StatCalculator calculator, EStat type, float baseValue, float maxValue = -1) : this(calculator, type)
         {
             SetValues(baseValue, maxValue);
         }
@@ -57,7 +64,12 @@ namespace Game.Characters.CharacterStats
             _onValueChanged += action;
         }
 
-        internal void SetValues(float baseValue, float maxValue)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="baseValue"></param>
+        /// <param name="maxValue">-1 means unlimited. Otherwise you can set smth like float.MaxValue</param>
+        internal void SetValues(float baseValue, float maxValue = -1)
         {
             _maxValue = maxValue;
             _baseValue = baseValue;
