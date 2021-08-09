@@ -9,6 +9,7 @@ namespace Game.Characters.CharacterStats
     [Serializable]
     public class Stat
     {
+        [SerializeField] EStat _type;
         [SerializeField] float _baseValue;
         [SerializeField] float _maxValue = -1;
 
@@ -25,7 +26,7 @@ namespace Game.Characters.CharacterStats
         /// </summary>
         public float BaseValue => _baseValue;
 
-        public readonly EStat Type;
+        public EStat Type => _type;
         public readonly IReadOnlyCollection<StatModifier> Modifiers;
 
         float _value;
@@ -41,7 +42,7 @@ namespace Game.Characters.CharacterStats
 
         public Stat(StatCalculator calculator, EStat type) : this()
         {
-            Type = type;
+            _type = type;
             _calculator = calculator;
         }
 
