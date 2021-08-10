@@ -1,9 +1,11 @@
 ﻿using Game.Characters;
-using Game.Characters.CharacterStats;
-using Game.Characters.CharacterStats.Commons;
-using Game.Characters.CharacterStats.Utils;
+using Game.Characters.Stats;
+using Game.Characters.Stats.Commons;
+using Game.Characters.Stats.Factories;
+using Game.Characters.Stats.Utils;
 using Game.Characters.Teams;
 using Game.Spells;
+using NSubstitute;
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,8 +17,9 @@ namespace Tests
         [Test]
         public void Test_Heal_Enemy()
         {
-            var caster = new Mage(new Stats());
-            var enemy = new Warrior(new Stats());
+            var statsFactory = Substitute.For<IStatCollectionFactory>();
+            var caster = new Mage(statsFactory);
+            var enemy = new Warrior(statsFactory);
 
             var team1 = new Team(1);
             var team2 = new Team(2);
@@ -30,7 +33,7 @@ namespace Tests
             healSpell.SelectTarget(enemy);
             healSpell.Cast();
 
-            Assert.AreEqual(0, enemy.Health.Value);
+            enemy.Health.DidNotReceive().Restore(default);
         }
 
         [Test]
@@ -87,14 +90,15 @@ namespace Tests
             Assert.AreEqual(150, warriorsList[1].Health.Value);
             Assert.AreEqual(150, warriorsList[2].Health.Value);
             Assert.AreEqual(150, warriorsList[3].Health.Value);
-            Assert.AreEqual(100,  warriorsList[4].Health.Value);
+            Assert.AreEqual(100, warriorsList[4].Health.Value);
         }
 
         [Test]
         public void Test_Heal_5_People_With_Caster_Inthe_Middle()
         {
+            var statsFactory = Substitute.For<IStatCollectionFactory>();
             var healthStat = new Stat(new StatCalculator(), EStat.Health, 200, 1000);
-            var caster = new Mage(new Stats(healthStat));
+            var caster = new Mage(statsFactory);
             var team = new Team(0);
             var healSpell = new HealReboundSpell(caster);
             var warriorsList = new List<Character>();
@@ -103,7 +107,7 @@ namespace Tests
 
             for (int i = 0; i < 5; i++)
             {
-                var warrior = new Warrior(new Stats(healthStat));
+                var warrior = new Warrior(statsFactory);
                 warriorsList.Add(warrior);
                 team.AddMembers(warrior);
 
@@ -128,8 +132,8 @@ namespace Tests
         [Test]
         public void Test_Heal_6_People_With_Enemies_Inthe_Middle()
         {
-            var healthStat = new Stat(new StatCalculator(), EStat.Health, 200, 1000);
-            var caster = new Mage(new Stats(healthStat));
+            var statsFactory = Substitute.For<IStatCollectionFactory>();
+            var caster = new Mage(statsFactory);
             var team = new Team(0);
             var enemyTeam = new Team(1);
             var healSpell = new HealReboundSpell(caster);
@@ -142,7 +146,7 @@ namespace Tests
 
             for (int i = 0; i < 6; i++)
             {
-                var warrior = new Warrior(new Stats(healthStat));
+                var warrior = new Warrior(statsFactory);
                 warriorsList.Add(warrior);
 
                 if (i % 2 == 0) team.AddMembers(warrior);
@@ -152,15 +156,20 @@ namespace Tests
                 warrior.View.transform.position = Vector3.right * Fact(6 - i);
             }
 
+            var counter = 0;
+            //2nd warrior should be healed 2 times.
+            warriorsList[2].Health.When(x => x.Restore(default)).Do(x => counter++);
+
             healSpell.SelectTarget(warriorsList[0]);
             healSpell.Cast();
 
-            Assert.AreEqual(150,  warriorsList[0].Health.Value);
-            Assert.AreEqual(100,   warriorsList[1].Health.Value);
-            Assert.AreEqual(200, warriorsList[2].Health.Value);
-            Assert.AreEqual(100,   warriorsList[3].Health.Value);
-            Assert.AreEqual(150,  warriorsList[4].Health.Value);
-            Assert.AreEqual(100,   warriorsList[5].Health.Value);
+            Assert.AreEqual(150, warriorsList[0].Health.Value);
+            Assert.AreEqual(100, warriorsList[1].Health.Value);
+            Assert.AreEqual(100, warriorsList[3].Health.Value);
+            Assert.AreEqual(150, warriorsList[4].Health.Value);
+            Assert.AreEqual(100, warriorsList[5].Health.Value);
+
+            Assert.AreEqual(2, counter);
         }
 
         int Fact(int number)

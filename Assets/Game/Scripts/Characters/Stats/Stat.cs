@@ -1,10 +1,10 @@
-﻿using Game.Characters.CharacterStats.Commons;
-using Game.Characters.CharacterStats.Utils;
+﻿using Game.Characters.Stats.Commons;
+using Game.Characters.Stats.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Characters.CharacterStats
+namespace Game.Characters.Stats
 {
     [Serializable]
     public class Stat
@@ -34,6 +34,9 @@ namespace Game.Characters.CharacterStats
         readonly StatCalculator _calculator;
         readonly List<StatModifier> _modifiers;
 
+        /// <summary>
+        /// Used in Unity Editor
+        /// </summary>
         public Stat()
         {
             _modifiers = new List<StatModifier>();
@@ -68,6 +71,14 @@ namespace Game.Characters.CharacterStats
             _maxValue = maxValue;
             _baseValue = baseValue;
             _wasModified = true;
+        }
+
+        internal void SetValues(Stat stat)
+        {
+            if (stat.Type == _type)
+            {
+                SetValues(stat.BaseValue, stat.MaxValue);
+            }
         }
 
         internal void AddModifiers(IEnumerable<StatModifier> modifiers)

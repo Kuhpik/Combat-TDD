@@ -1,12 +1,12 @@
-﻿using Game.Characters.CharacterStats;
+﻿using Game.Characters.Stats.Factories;
 using Zenject;
 
 namespace Game.Characters
 {
     public class Warrior : Character
     {
-        public Warrior(CharacterSettings settings) : base(settings) { }
-        public Warrior(Stats stats) : base(stats) { }
+        public Warrior(IStatCollectionFactory statsFactory, CharacterSettings settings = null) 
+            : base(statsFactory, settings) { }
 
         public class Factory : PlaceholderFactory<Warrior> { }
     }

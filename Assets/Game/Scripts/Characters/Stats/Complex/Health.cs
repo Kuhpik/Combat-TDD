@@ -1,8 +1,8 @@
-﻿using Game.Characters.CharacterStats.Commons;
+﻿using Game.Characters.Stats.Commons;
 using System;
 using UnityEngine;
 
-namespace Game.Characters.CharacterStats.Complex
+namespace Game.Characters.Stats.Complex
 {
     [Serializable]
     public class Health
@@ -13,9 +13,9 @@ namespace Game.Characters.CharacterStats.Complex
         public float Value => GetValue();
         public float MaxValue => _maxValue;
 
-        readonly Stats _playerStats;
+        readonly StatCollection _playerStats;
 
-        public Health(Stats stats)
+        public Health(StatCollection stats)
         {
             _playerStats = stats;
             GetValue();

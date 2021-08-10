@@ -1,10 +1,10 @@
-﻿using Game.Characters.CharacterStats.Commons;
+﻿using Game.Characters.Stats.Commons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Game.Characters.CharacterStats.Utils
+namespace Game.Characters.Stats.Utils
 {
     public class StatCalculator
     {

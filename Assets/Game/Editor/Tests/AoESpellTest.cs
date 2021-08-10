@@ -1,7 +1,7 @@
 ﻿using Game.Characters;
-using Game.Characters.CharacterStats;
-using Game.Characters.CharacterStats.Commons;
-using Game.Characters.CharacterStats.Utils;
+using Game.Characters.Stats;
+using Game.Characters.Stats.Commons;
+using Game.Characters.Stats.Utils;
 using Game.Spells;
 using Game.Spells.Utils;
 using NUnit.Framework;
@@ -86,10 +86,10 @@ namespace Tests
 
             spell.Cast();
 
-            Assert.AreEqual(healthLeft,  warrior1.Health.Value);
-            Assert.AreEqual(healthLeft,  warrior2.Health.Value);
+            Assert.AreEqual(healthLeft, warrior1.Health.Value);
+            Assert.AreEqual(healthLeft, warrior2.Health.Value);
             Assert.AreEqual(dummyHealth, warrior3.Health.Value);
-            Assert.AreEqual(healthLeft,  warrior4.Health.Value);
+            Assert.AreEqual(healthLeft, warrior4.Health.Value);
             Assert.AreEqual(dummyHealth, warrior5.Health.Value);
         }
     }

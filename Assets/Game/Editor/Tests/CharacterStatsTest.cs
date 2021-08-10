@@ -1,6 +1,6 @@
-﻿using Game.Characters.CharacterStats;
-using Game.Characters.CharacterStats.Commons;
-using Game.Characters.CharacterStats.Utils;
+﻿using Game.Characters.Stats;
+using Game.Characters.Stats.Commons;
+using Game.Characters.Stats.Utils;
 using NSubstitute;
 using NUnit.Framework;
 using System.Collections.Generic;

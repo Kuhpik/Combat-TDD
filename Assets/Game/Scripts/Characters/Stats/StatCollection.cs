@@ -1,16 +1,14 @@
-﻿using Game.Characters.CharacterStats.Commons;
-using Game.Characters.CharacterStats.Utils;
-using System;
+﻿using Game.Characters.Stats.Commons;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Game.Characters.CharacterStats
+namespace Game.Characters.Stats
 {
     /// <summary>
     /// Stat collection wrapper
     /// </summary>
-    public sealed class Stats
+    public sealed class StatCollection
     {
         public readonly IReadOnlyDictionary<EStat, Stat> StatDictionary;
         public readonly IReadOnlyCollection<IStatModifierProvider> Sources;
@@ -19,36 +17,30 @@ namespace Game.Characters.CharacterStats
         readonly Dictionary<EStat, Stat> _statDictionary;
         readonly HashSet<IStatModifierProvider> _sourcesMap;
 
-        public Stats()
-        {
-            _statDictionary = (Enum.GetValues(typeof(EStat)) as IList<EStat>)
-                .ToDictionary(x => x, x => new Stat(new StatCalculator(), x)); //TODO: Zenject factory
-
-            StatDictionary = new ReadOnlyDictionary<EStat, Stat>(_statDictionary);
-            _sourcesMap = new HashSet<IStatModifierProvider>();
-            _sources = new List<IStatModifierProvider>();
-            Sources = _sources.AsReadOnly();
-        }
-
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="stats">Will not use provided references or modifiers. Only used to copy base values.</param>
-        public Stats(params Stat[] stats) : this()
+        /// <param name="stats">Instances that will be used</param>
+        public StatCollection(params Stat[] stats)
         {
-            foreach (var stat in stats)
-            {
-                SetStat(stat);
-            }
+            _statDictionary = stats.ToDictionary(x => x.Type, x => x);
+            _sourcesMap = new HashSet<IStatModifierProvider>();
+            _sources = new List<IStatModifierProvider>();
+
+            StatDictionary = new ReadOnlyDictionary<EStat, Stat>(_statDictionary);
+            Sources = _sources.AsReadOnly();
         }
 
         /// <summary>
         /// Will not use provided referense or modifiers. Only used to copy base values
         /// </summary>
-        public void SetStat(Stat stat)
+        public void SetValues(params Stat[] stats)
         {
-            var cachedStat = _statDictionary[stat.Type];
-            cachedStat.SetValues(stat.BaseValue, stat.MaxValue);
+            foreach (var stat in stats)
+            {
+                var cachedStat = _statDictionary[stat.Type];
+                cachedStat.SetValues(stat.BaseValue, stat.MaxValue);
+            }            
         }
 
         public float GetValue(EStat type)

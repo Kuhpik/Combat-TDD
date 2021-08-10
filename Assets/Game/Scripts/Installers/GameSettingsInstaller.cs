@@ -17,10 +17,9 @@ namespace Game.Installers
                 return;
             }
 
+            Container.BindInstance(_settings);
             Container.BindFactory<Mage, Mage.Factory>().WithArguments(_settings.Mage);
             Container.BindFactory<Warrior, Warrior.Factory>().WithArguments(_settings.Warrior);
-
-            Container.BindInstance(_settings);
         }
     }
 }

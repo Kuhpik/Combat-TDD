@@ -1,6 +1,8 @@
 ﻿using Game.Characters;
-using Game.Characters.CharacterStats;
+using Game.Characters.Stats;
+using Game.Characters.Stats.Factories;
 using Game.Characters.Teams;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Tests
@@ -23,9 +25,11 @@ namespace Tests
         [Test]
         public void Test_Characters()
         {
-            var character1 = new Mage(new Stats());
-            var character2 = new Mage(new Stats());
-            var character3 = new Mage(new Stats());
+            var statsFactory = Substitute.For<IStatCollectionFactory>();
+
+            var character1 = new Mage(statsFactory);
+            var character2 = new Mage(statsFactory);
+            var character3 = new Mage(statsFactory);
 
             var team = new Team(1);
 

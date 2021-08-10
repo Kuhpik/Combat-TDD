@@ -1,4 +1,4 @@
-﻿using Game.Characters.CharacterStats;
+﻿using Game.Characters.Stats;
 using System;
 using UnityEngine;
 
@@ -8,6 +8,6 @@ namespace Game.Characters
     public class CharacterSettings
     {
         [field: SerializeField] public GameObject Prefab { get; private set; }
-        [field: SerializeField] public Stats Stats { get; private set; }
+        [field: SerializeField] public StatCollection Stats { get; private set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Game.Characters.CharacterStats.Commons
+namespace Game.Characters.Stats.Commons
 {
     public interface IStatModifierProvider
     {

@@ -1,4 +1,4 @@
-﻿namespace Game.Characters.CharacterStats.Commons
+﻿namespace Game.Characters.Stats.Commons
 {
     public enum EStat
     {

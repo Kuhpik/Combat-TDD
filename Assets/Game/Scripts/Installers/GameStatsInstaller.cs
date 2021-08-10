@@ -1,5 +1,5 @@
-﻿using Game.Characters;
-using Game.Characters.CharacterStats;
+﻿using Game.Characters.Stats.Factories;
+using Game.Characters.Stats.Utils;
 using Game.Settings;
 using UnityEngine;
 using Zenject;
@@ -8,20 +8,20 @@ namespace Game.Installers
 {
     public class GameStatsInstaller : MonoInstaller
     {
-        [SerializeField] Stats _statsSettings;
+        [SerializeField] StatsSettings _settings;
 
         public override void InstallBindings()
         {
-            if (_statsSettings == null)
+            if (_settings == null)
             {
                 Debug.LogError("Settings was not set");
                 return;
             }
 
-            //Container.BindFactory<Mage, Mage.Factory>().WithArguments(_statsSettings.Mage);
-            //Container.BindFactory<Warrior, Warrior.Factory>().WithArguments(_statsSettings.Warrior);
-
-            Container.BindInstance(_statsSettings);
+            Container.BindInstance(_settings);
+            Container.Bind<StatCalculator>().ToSelf().AsTransient();
+            Container.Bind<IStatsFactory>().To<StatsFactory>().AsSingle();
+            Container.Bind<IStatCollectionFactory>().To<StatCollectionFactory>().AsSingle();
         }
     }
 }

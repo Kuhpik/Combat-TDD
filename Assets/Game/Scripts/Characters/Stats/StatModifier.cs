@@ -1,6 +1,6 @@
-﻿using Game.Characters.CharacterStats.Commons;
+﻿using Game.Characters.Stats.Commons;
 
-namespace Game.Characters.CharacterStats
+namespace Game.Characters.Stats
 {
     public class StatModifier
     {
