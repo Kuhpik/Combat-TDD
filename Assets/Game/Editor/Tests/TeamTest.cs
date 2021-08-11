@@ -1,9 +1,11 @@
 ﻿using Game.Characters;
 using Game.Characters.Stats;
 using Game.Characters.Stats.Factories;
+using Game.Characters.Stats.Utils;
 using Game.Characters.Teams;
 using NSubstitute;
 using NUnit.Framework;
+using Tests.Helpers;
 
 namespace Tests
 {
@@ -12,31 +14,32 @@ namespace Tests
         [Test]
         public void Test_Naming()
         {
-            var team = new Team(1);
-            team.SetName("Yes");
-            team.SetName("No");
-
+            //Arrange
+            var team1 = new Team(1);
             var team2 = new Team(2, "Sure");
 
-            Assert.AreEqual(team.Name, "No");
-            Assert.AreEqual(team2.Name, "Sure");
+            //Act
+            team1.SetName("Yes");
+            team1.SetName("No");
+
+            //Assert
+            Assert.AreEqual("No", team1.Name);
+            Assert.AreEqual("Sure", team2.Name);
         }
 
         [Test]
         public void Test_Characters()
         {
-            var statsFactory = Substitute.For<IStatCollectionFactory>();
-
-            var character1 = new Mage(statsFactory);
-            var character2 = new Mage(statsFactory);
-            var character3 = new Mage(statsFactory);
-
+            //Arrange
+            var characters = new TestCharactersCreator().CreateCharacters(3);
             var team = new Team(1);
 
-            team.AddMembers(character1, character2);
-            team.RemoveMembers(character3);
+            //Act
+            team.AddMembers(characters[0], characters[1]);
+            team.RemoveMembers(characters[2]);
 
-            Assert.AreEqual(team.Members.Count, 2);
+            //Assert
+            Assert.AreEqual(2, team.Members.Count);
         }
     }
 }
