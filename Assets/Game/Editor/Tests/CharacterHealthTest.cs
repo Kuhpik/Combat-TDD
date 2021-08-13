@@ -11,7 +11,6 @@ namespace Tests
     public class CharacterHealthTest
     {
         [Test]
-        //Trying to clarify test's meaning with better naming
         public void Was_100_Of_200_HP_Modifier_Removed_Should_Be_80_Of_80()
         {
             //Arrange

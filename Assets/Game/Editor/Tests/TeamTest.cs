@@ -1,9 +1,4 @@
-﻿using Game.Characters;
-using Game.Characters.Stats;
-using Game.Characters.Stats.Factories;
-using Game.Characters.Stats.Utils;
-using Game.Characters.Teams;
-using NSubstitute;
+﻿using Game.Characters.Teams;
 using NUnit.Framework;
 using Tests.Helpers;
 
@@ -12,23 +7,31 @@ namespace Tests
     public class TeamTest
     {
         [Test]
-        public void Test_Naming()
+        public void One_Team_Created_With_Name_Name_Shouldbe_Same()
         {
             //Arrange
-            var team1 = new Team(1);
-            var team2 = new Team(2, "Sure");
-
-            //Act
-            team1.SetName("Yes");
-            team1.SetName("No");
+            var team = new Team(1, "Sure");
 
             //Assert
-            Assert.AreEqual("No", team1.Name);
-            Assert.AreEqual("Sure", team2.Name);
+            Assert.AreEqual("Sure", team.Name);
         }
 
         [Test]
-        public void Test_Characters()
+        public void Team_Name_Changed_Two_Times_Name_Must_Be_Last_One_Set()
+        {
+            //Arrange
+            var team = new Team(1);
+
+            //Act
+            team.SetName("Yes");
+            team.SetName("No");
+
+            //Assert
+            Assert.AreEqual("No", team.Name);
+        }
+
+        [Test]
+        public void Three_Characters_Added_To_The_Team_One_Character_Removed_Count_Of_Team_Members_Must_Be_Two()
         {
             //Arrange
             var characters = new TestCharactersCreator().CreateCharacters(3);

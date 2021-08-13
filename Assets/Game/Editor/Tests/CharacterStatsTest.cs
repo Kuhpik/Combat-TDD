@@ -10,38 +10,49 @@ namespace Tests
     public class CharacterStatsTest
     {
         [Test]
-        public void All_Stats_Created_1_HasValue()
+        public void Damage_Stat_Created_With_Value_10_Check_Value_Must_Return_10()
         {
             var damageStat = new Stat(new StatCalculator(), EStat.Damage, 10f);
             Assert.AreEqual(10, damageStat.Value);
         }
 
         [Test]
-        public void Test_Stat_With_Max_Value()
+        public void Damage_Stat_Created_With_Value_10_But_Max_Value_5_Check_Value_Must_Return_5()
         {
             //Arrange
             var stats = new StatCollection
             (
-                new Stat(new StatCalculator(), EStat.Damage, 10, 5),
-                new Stat(new StatCalculator(), EStat.AbilityPower, 10, 100)
+                new Stat(new StatCalculator(), EStat.Damage, 10, 5)
             );
 
-            var flatAPModifier = new StatModifier(EBonusType.Flat, 200);
+            //Assert
+            Assert.AreEqual(5, stats.GetValue(EStat.Damage));
+        }
+
+        [Test]
+        public void Damage_Stat_Created_With_Max_Value_100_Flat_Modifier_Applied_With_Value_200_Check_Value_Must_Return_100()
+        {
+            //Arrange
+            var stats = new StatCollection
+            (
+                new Stat(new StatCalculator(), EStat.Damage, 10, 100)
+            );
+
+            var flatDamageModifier = new StatModifier(EBonusType.Flat, 200);
             var modifiersDictionary = new Dictionary<EStat, IReadOnlyCollection<StatModifier>>();
             var modifierProvider = Substitute.For<IStatModifierProvider>();
 
             //Act
-            modifiersDictionary.Add(EStat.AbilityPower, new List<StatModifier>() { flatAPModifier });
+            modifiersDictionary.Add(EStat.Damage, new List<StatModifier>() { flatDamageModifier });
             modifierProvider.GetModifiers().Returns(modifiersDictionary);
             stats.ApplyModifiers(modifierProvider);
 
             //Assert
-            Assert.AreEqual(5, stats.GetValue(EStat.Damage));
-            Assert.AreEqual(100, stats.GetValue(EStat.AbilityPower));
+            Assert.AreEqual(100, stats.GetValue(EStat.Damage));
         }
 
         [Test]
-        public void Base_Stat_Isnt_Affected_By_Modifiers()
+        public void Use_Stat_As_A_Value_Provider_Apply_Modifiers_To_New_Stats_First_One_Must_Not_Be_Affected_By_Modifier()
         {
             //Arrange
             var baseAP = new Stat(new StatCalculator(), EStat.AbilityPower, 10, 500);
@@ -61,7 +72,7 @@ namespace Tests
         }
 
         [Test]
-        public void Equip_Two_Sources_Unequip_One()
+        public void Apply_Two_Sources_Remove_One_Only_One_Sourse_Should_Affect_Stats()
         {
             //Arrange
             var stats = new StatCollection(new Stat(new StatCalculator(), EStat.AbilityPower, 10, 1000));
@@ -74,12 +85,13 @@ namespace Tests
             stats.RemoveModifiers(modifierProvider1);
 
             //Assert
+            Assert.AreEqual(1, stats.Sources.Count);
             Assert.AreEqual(true, stats.IsAffectedBy(modifierProvider2));
             Assert.AreEqual(false, stats.IsAffectedBy(modifierProvider1));
         }
 
         [Test]
-        public void Equip_None_Sources()
+        public void Apply_Zero_Sources_None_Sources_Should_Affect_Stats()
         {
             //Arrange
             var modifierProvider = Substitute.For<IStatModifierProvider>();
@@ -89,11 +101,12 @@ namespace Tests
             stats.ApplyModifiers();
 
             //Assert
+            Assert.AreEqual(0, stats.Sources.Count);
             Assert.AreEqual(false, stats.IsAffectedBy(modifierProvider));
         }
 
         [Test]
-        public void Equp_Same_Source_Several_Times()
+        public void Apply_Same_Source_Several_Times_Only_One_Souce_Should_Affect_Stats()
         {
             //Arrange
             var modifierProvider = Substitute.For<IStatModifierProvider>();
@@ -109,7 +122,7 @@ namespace Tests
         }
 
         [Test]
-        public void Unequip_Same_Source_Several_Times()
+        public void Remove_Same_Source_Several_Time_Zero_Sources_Should_Affect_Stats()
         {
             //Arrange
             var modifierProvider = Substitute.For<IStatModifierProvider>();
@@ -125,7 +138,7 @@ namespace Tests
         }
 
         [Test]
-        public void Change_Base_Value()
+        public void Change_Stat_Base_Values_Several_Times_Stat_Values_Should_Be_Equal_To_Last_Ones_Set()
         {
             //Arrange
             var stats = new StatCollection(new Stat(new StatCalculator(), EStat.AbilityPower, 10, 1000));
@@ -133,10 +146,11 @@ namespace Tests
             //Act
             stats.SetValues(new Stat(new StatCalculator(), EStat.AbilityPower, 200, 2000));
             stats.SetValues(new Stat(new StatCalculator(), EStat.AbilityPower, 50, 2000));
-            stats.SetValues(new Stat(new StatCalculator(), EStat.AbilityPower, 500, 2000));
+            stats.SetValues(new Stat(new StatCalculator(), EStat.AbilityPower, 500, 8000));
 
             //Assert
-            Assert.AreEqual(500, stats.GetValue(EStat.AbilityPower));
+            Assert.AreEqual(500, stats.GetStat(EStat.AbilityPower).BaseValue);
+            Assert.AreEqual(8000, stats.GetStat(EStat.AbilityPower).MaxValue);
         }
     }
 }

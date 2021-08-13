@@ -11,7 +11,7 @@ namespace Tests
     public class AoESpellTest
     {
         [Test]
-        public void AoESpellCheckDamage()
+        public void One_Spell_Created_With_Damage_50_Second_Spell_Damage_Set_To_100_Values_Must_Be_Same()
         {
             var targetingService = new AreaTargetingService(new CircleSpellArea(2), new List<Character>());
             var spell1 = new AoEBurstDamageSpell(targetingService);
@@ -24,7 +24,7 @@ namespace Tests
         }
 
         [Test]
-        public void Rect_Spell_Hit_2_Warriors_1_Out_Of_Area()
+        public void Create_Rect_Area_Spell_Two_Characters_Inside_One_Outside_Only_Inside_Ones_Should_Receive_Damage()
         {
             //Arrange
             var characters = new TestCharactersCreator().CreateCharacters(3);
@@ -49,7 +49,7 @@ namespace Tests
         }
 
         [Test]
-        public void Circle_Spell_Hit_3_Warriors_2_Out_Of_Area()
+        public void Create_Circle_Area_Spell_Tree_Characters_Inside_Two_Outside_Only_Inside_Ones_Should_Receive_Damage()
         {
             //Arrange
             var characters = new TestCharactersCreator().CreateCharacters(5);
